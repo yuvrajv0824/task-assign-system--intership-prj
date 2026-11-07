@@ -3,6 +3,7 @@ package com.epsm.config;
 import com.epsm.model.approval;
 import com.epsm.model.auditlog;
 import com.epsm.model.milestone;
+import com.epsm.model.notification;
 import com.epsm.model.project;
 import com.epsm.model.role;
 import com.epsm.model.task;
@@ -11,6 +12,7 @@ import com.epsm.model.user;
 import com.epsm.repository.approvalrepo;
 import com.epsm.repository.auditlogrepo;
 import com.epsm.repository.milestonerepo;
+import com.epsm.repository.notificationrepo;
 import com.epsm.repository.projectrepo;
 import com.epsm.repository.taskrepo;
 import com.epsm.repository.ticketrepo;
@@ -37,6 +39,7 @@ public class dataseeder {
             ticketrepo ticketrepo,
             approvalrepo approvalrepo,
             auditlogrepo auditlogrepo,
+            notificationrepo notificationrepo,
             PasswordEncoder passwordEncoder
     ) {
         return args -> {
@@ -177,6 +180,14 @@ public class dataseeder {
                     auditlogrepo.save(new auditlog("admin", "USER_ROLE_ASSIGNED", "yuvraj.v", "Assigned ROLE_TEAM_MEMBER on Platform Core squad", "192.168.1.10"));
                     auditlogrepo.save(new auditlog("puneeth.rajkumar", "APPROVAL_GRANTED", "APR-101", "Approved Production Database Schema Migration", "192.168.1.12"));
                     auditlogrepo.save(new auditlog("yuvraj.v", "TASK_STATUS_UPDATE", "TSK-01", "Spring Boot 3 pure ORM setup moved to DONE (+5 story points)", "192.168.1.15"));
+                }
+
+                // 10. seed enterprise desk alerts & dms (PDF Module 6.5 & 6.6)
+                if (notificationrepo.count() == 0) {
+                    notificationrepo.save(new notification("NTF-101", "Yuvraj V", "Service Desk SLA", "SLA_ALERT", "Critical SLA Warning on TKT-101", "Memory Leak on Background Task Runner has elapsed 82% of target SLA. Immediate action required.", "CRITICAL"));
+                    notificationrepo.save(new notification("NTF-102", "Puneeth Rajkumar", "DevOps Desk", "APPROVAL_REQUEST", "Deployment Approval Required: PRJ-102", "Yash submitted production database schema migration for review.", "HIGH"));
+                    notificationrepo.save(new notification("NTF-103", "Yuvraj V", "Puneeth Rajkumar", "DIRECT_MESSAGE", "Sprint 25 Architecture Review", "Great progress on the JPA controllers. Please verify all SLA countdown edge cases today.", "MEDIUM"));
+                    notificationrepo.save(new notification("NTF-104", "All", "Cloud Infrastructure", "SYSTEM_NOTICE", "Maintenance Window Announcement", "Flyway schema V2 migration scheduled for Sunday 11:00 PM IST.", "LOW"));
                 }
             }
         };
