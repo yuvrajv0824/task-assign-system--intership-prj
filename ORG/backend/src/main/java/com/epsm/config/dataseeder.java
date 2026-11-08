@@ -6,6 +6,7 @@ import com.epsm.model.milestone;
 import com.epsm.model.notification;
 import com.epsm.model.project;
 import com.epsm.model.role;
+import com.epsm.model.sprint;
 import com.epsm.model.task;
 import com.epsm.model.ticket;
 import com.epsm.model.user;
@@ -14,6 +15,7 @@ import com.epsm.repository.auditlogrepo;
 import com.epsm.repository.milestonerepo;
 import com.epsm.repository.notificationrepo;
 import com.epsm.repository.projectrepo;
+import com.epsm.repository.sprintrepo;
 import com.epsm.repository.taskrepo;
 import com.epsm.repository.ticketrepo;
 import com.epsm.repository.userrepo;
@@ -40,6 +42,7 @@ public class dataseeder {
             approvalrepo approvalrepo,
             auditlogrepo auditlogrepo,
             notificationrepo notificationrepo,
+            sprintrepo sprintrepo,
             PasswordEncoder passwordEncoder
     ) {
         return args -> {
@@ -188,6 +191,13 @@ public class dataseeder {
                     notificationrepo.save(new notification("NTF-102", "Puneeth Rajkumar", "DevOps Desk", "APPROVAL_REQUEST", "Deployment Approval Required: PRJ-102", "Yash submitted production database schema migration for review.", "HIGH"));
                     notificationrepo.save(new notification("NTF-103", "Yuvraj V", "Puneeth Rajkumar", "DIRECT_MESSAGE", "Sprint 25 Architecture Review", "Great progress on the JPA controllers. Please verify all SLA countdown edge cases today.", "MEDIUM"));
                     notificationrepo.save(new notification("NTF-104", "All", "Cloud Infrastructure", "SYSTEM_NOTICE", "Maintenance Window Announcement", "Flyway schema V2 migration scheduled for Sunday 11:00 PM IST.", "LOW"));
+                }
+
+                // 11. seed sprint cycles & release versions (PDF Module 6.4)
+                if (sprintrepo.count() == 0) {
+                    sprintrepo.save(new sprint("SPR-24", "Sprint 24: Core Entity Mappings & JWT", "v1.1.0-RELEASE", "Bootstrap initial models, pure JPA repositories, and stateless authentication", LocalDate.now().minusWeeks(3), LocalDate.now().minusWeeks(1), "COMPLETED", 38, 38));
+                    sprintrepo.save(new sprint("SPR-25", "Sprint 25: Service Desk SLA & Pure ORM", "v1.2.0-RC1", "Complete Service Desk SLA Countdown and JPA ORM entity mappings with 0 warnings", LocalDate.now().minusWeeks(1), LocalDate.now().plusWeeks(1), "ACTIVE", 45, 28));
+                    sprintrepo.save(new sprint("SPR-26", "Sprint 26: Release Versioning & Epics", "v1.3.0-DEV", "Implement sprint cycle lifecycle planning, automated release versioning, and capacity balancer", LocalDate.now().plusWeeks(1), LocalDate.now().plusWeeks(3), "PLANNED", 40, 0));
                 }
             }
         };

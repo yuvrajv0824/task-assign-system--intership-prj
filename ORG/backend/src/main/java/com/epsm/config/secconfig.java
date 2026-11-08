@@ -59,6 +59,7 @@ public class secconfig {
                                 "/api/v1/audit/**",
                                 "/api/v1/analytics/**",
                                 "/api/v1/notifications/**",
+                                "/api/v1/sprints/**",
                                 "/h2-console/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"

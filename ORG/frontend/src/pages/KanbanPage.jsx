@@ -73,6 +73,43 @@ export function KanbanPage({ tasks, onMoveTask, onCreateTask }) {
         </Button>
       </div>
 
+      {/* Active Sprint Cycle & Version Banner */}
+      <div className="p-4 rounded-card bg-bg-subtle border border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-bold text-accent px-2 py-0.5 rounded bg-surface border border-border">
+              SPR-25
+            </span>
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-text-muted border border-border">
+              v1.2.0-RC1
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-status-success-bg text-status-success">
+              Active Cycle
+            </span>
+          </div>
+          <h3 className="text-xs font-semibold text-text">
+            Sprint 25: Service Desk SLA &amp; Pure ORM
+          </h3>
+          <p className="text-[11px] text-text-muted">
+            Goal: Complete Service Desk SLA Countdown and JPA ORM entity mappings with 0 warnings.
+          </p>
+        </div>
+
+        <div className="w-full md:w-60 space-y-1.5 self-start md:self-auto">
+          <div className="flex items-center justify-between text-xs text-text-muted">
+            <span>Cycle Burn</span>
+            <span className="font-semibold text-text tabular-nums">28 / 45 pts (62%)</span>
+          </div>
+          <div className="w-full bg-border rounded-full h-1.5 overflow-hidden">
+            <div className="bg-accent h-1.5 rounded-full" style={{ width: '62%' }} />
+          </div>
+          <div className="text-[10px] text-text-faint flex justify-between">
+            <span>Start: 27 Oct</span>
+            <span>Ends: 10 Nov</span>
+          </div>
+        </div>
+      </div>
+
       {/* 5 Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-3.5 items-start">
         {COLUMNS.map((col) => {
