@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Search, FolderKanban, CheckSquare, Flag, Clock, FileCheck2, Users, History, Activity } from 'lucide-react';
+import { 
+  Search, 
+  FolderKanban, 
+  CheckSquare, 
+  Clock, 
+  Users, 
+  History, 
+  Activity 
+} from 'lucide-react';
 
 export function CommandPalette({ isOpen, onClose, onNavigate }) {
   const [query, setQuery] = useState('');
 
   const commands = [
     { id: 'dashboard', label: 'Go to Dashboard', icon: Activity, category: 'Navigation' },
-    { id: 'projects', label: 'Go to Projects', icon: FolderKanban, category: 'Navigation' },
-    { id: 'kanban', label: 'Go to Tasks (Kanban)', icon: CheckSquare, category: 'Navigation' },
-    { id: 'milestones', label: 'Go to Milestones', icon: Flag, category: 'Navigation' },
-    { id: 'tickets', label: 'Go to Service Desk', icon: Clock, category: 'Navigation' },
-    { id: 'approvals', label: 'Go to Approvals', icon: FileCheck2, category: 'Navigation' },
-    { id: 'workload', label: 'Go to Squad Workload', icon: Users, category: 'Navigation' },
-    { id: 'audit', label: 'Go to Audit Trail', icon: History, category: 'Navigation' },
+    { id: 'projects', label: 'Go to Projects & Milestones', icon: FolderKanban, category: 'Navigation' },
+    { id: 'kanban', label: 'Go to Tasks & Kanban', icon: CheckSquare, category: 'Navigation' },
+    { id: 'tickets', label: 'Go to Service Desk & SLA', icon: Clock, category: 'Navigation' },
+    { id: 'workload', label: 'Go to Workload & Approvals', icon: Users, category: 'Navigation' },
+    { id: 'audit', label: 'Go to Audit & Administration', icon: History, category: 'Navigation' },
   ];
 
   useEffect(() => {
@@ -20,7 +26,7 @@ export function CommandPalette({ isOpen, onClose, onNavigate }) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         if (isOpen) onClose();
-        else onClose(false); // toggle
+        else onClose(false);
       }
       if (e.key === 'Escape' && isOpen) onClose();
     };
@@ -47,7 +53,7 @@ export function CommandPalette({ isOpen, onClose, onNavigate }) {
           <Search className="w-4 h-4 text-text-muted shrink-0" strokeWidth={1.5} />
           <input
             type="text"
-            placeholder="Type a command or search pages..."
+            placeholder="Type a command or jump to page..."
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -60,24 +66,26 @@ export function CommandPalette({ isOpen, onClose, onNavigate }) {
 
         <div className="max-h-72 overflow-y-auto p-2 space-y-1">
           {filtered.length === 0 ? (
-            <div className="p-4 text-xs text-text-muted text-center">No commands matching &quot;{query}&quot;</div>
+            <div className="py-6 text-center text-xs text-text-faint">
+              No matching pages found
+            </div>
           ) : (
-            filtered.map((item) => {
-              const Icon = item.icon;
+            filtered.map((cmd) => {
+              const Icon = cmd.icon;
               return (
                 <button
-                  key={item.id}
+                  key={cmd.id}
                   onClick={() => {
-                    onNavigate(item.id);
+                    onNavigate(cmd.id);
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between p-2.5 rounded-input text-xs font-semibold text-text hover:bg-bg-subtle transition"
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-input text-xs hover:bg-bg-subtle text-left transition"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Icon className="w-4 h-4 text-text-muted" strokeWidth={1.5} />
-                    <span>{item.label}</span>
+                    <Icon className="w-4 h-4 text-accent shrink-0" strokeWidth={1.5} />
+                    <span className="font-medium text-text">{cmd.label}</span>
                   </div>
-                  <span className="text-[10px] text-text-faint">{item.category}</span>
+                  <span className="text-[10px] font-mono text-text-faint">Jump &rarr;</span>
                 </button>
               );
             })
@@ -87,4 +95,3 @@ export function CommandPalette({ isOpen, onClose, onNavigate }) {
     </div>
   );
 }
-

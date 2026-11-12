@@ -8,11 +8,9 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { KanbanPage } from './pages/KanbanPage';
-import { MilestonesPage } from './pages/MilestonesPage';
 import { ServiceDeskPage } from './pages/ServiceDeskPage';
-import { ApprovalsPage } from './pages/ApprovalsPage';
-import { SquadWorkloadPage } from './pages/SquadWorkloadPage';
-import { AuditTrailPage } from './pages/AuditTrailPage';
+import { WorkloadPage } from './pages/WorkloadPage';
+import { AuditPage } from './pages/AuditPage';
 
 import api from './api/client';
 
@@ -23,14 +21,15 @@ function AppContent() {
   const [isOnline, setIsOnline] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Core Data States with realistic fallbacks (Corporate personas per PDF specification)
+  // 1. Projects Data (PDF Section 6.2)
   const [projects, setProjects] = useState([
-    { id: 1, code: 'PRJ-101', name: 'Enterprise Platform Core', lead: 'Anita Rao', dueDate: '2026-11-20', health: 'ON_TRACK', progress: 65, tasksCount: 12, teammates: 5 },
-    { id: 2, code: 'PRJ-102', name: 'Payment & Billing Gateway', lead: 'Yuvraj V', dueDate: '2026-11-28', health: 'ON_TRACK', progress: 45, tasksCount: 8, teammates: 4 },
-    { id: 3, code: 'PRJ-103', name: 'Cloud Infrastructure Migration', lead: 'Karthik Swaminathan', dueDate: '2026-12-05', health: 'AT_RISK', progress: 30, tasksCount: 14, teammates: 6 },
-    { id: 4, code: 'PRJ-104', name: 'Security & Identity Modernization', lead: 'Vikram Mehta', dueDate: '2026-12-15', health: 'ON_TRACK', progress: 80, tasksCount: 7, teammates: 3 },
+    { id: 1, code: 'PRJ-101', name: 'Enterprise Platform Core', lead: 'Anita Rao', dueDate: '2026-11-20', health: 'ON_TRACK', progress: 65, tasksCount: 12, teammates: 5, client: 'Core Banking' },
+    { id: 2, code: 'PRJ-102', name: 'Payment & Billing Gateway', lead: 'Yuvraj V', dueDate: '2026-11-28', health: 'ON_TRACK', progress: 45, tasksCount: 8, teammates: 4, client: 'Fintech Ops' },
+    { id: 3, code: 'PRJ-103', name: 'Cloud Infrastructure Migration', lead: 'Karthik Swaminathan', dueDate: '2026-12-05', health: 'AT_RISK', progress: 30, tasksCount: 14, teammates: 6, client: 'DevOps & Cloud' },
+    { id: 4, code: 'PRJ-104', name: 'Security & Identity Modernization', lead: 'Vikram Mehta', dueDate: '2026-12-15', health: 'ON_TRACK', progress: 80, tasksCount: 7, teammates: 3, client: 'Enterprise Security' },
   ]);
 
+  // 2. Milestones Data (PDF Section 6.3)
   const [milestones, setMilestones] = useState([
     { id: 1, projectCode: 'PRJ-101', title: 'Complete Spring Boot 3 pure JPA ORM foundation', owner: 'Anita Rao', targetDate: '2026-11-15', status: 'IN_PROGRESS', progress: 85 },
     { id: 2, projectCode: 'PRJ-101', title: 'Implement SLA Countdown & Warning Engine', owner: 'Yuvraj V', targetDate: '2026-11-20', status: 'IN_PROGRESS', progress: 75 },
@@ -38,6 +37,7 @@ function AppContent() {
     { id: 4, projectCode: 'PRJ-103', title: 'Automated Multi-Stage Governance Approvals', owner: 'Karthik Swaminathan', targetDate: '2026-12-01', status: 'IN_PROGRESS', progress: 60 },
   ]);
 
+  // 3. Tasks & Kanban Data (PDF Section 6.4)
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -105,7 +105,7 @@ function AppContent() {
       code: 'TSK-105',
       title: 'Configure pure JPA Flyway database schemas',
       priority: 'HIGH',
-      points: 16,
+      points: 8,
       assignee: 'Karthik Swaminathan',
       team: 'Platform Core',
       status: 'REVIEW',
@@ -117,12 +117,14 @@ function AppContent() {
     },
   ]);
 
+  // 4. Service Desk Tickets (PDF Section 6.5 & 6.7)
   const [tickets, setTickets] = useState([
     { id: 1, code: 'TKT-101', subject: 'Memory Leak on Background Task Runner', severity: 'CRITICAL', status: 'IN_PROGRESS', targetHours: 8, reporter: 'Ops Center', dept: 'Platform Core', createdAt: '2026-11-05T13:00:00' },
     { id: 2, code: 'TKT-102', subject: 'JWT Bearer Expiration Handshake Failure', severity: 'HIGH', status: 'IN_PROGRESS', targetHours: 8, reporter: 'QA Lead', dept: 'Security & Auth', createdAt: '2026-11-05T15:30:00' },
     { id: 3, code: 'TKT-103', subject: 'CORS header mismatch on Swagger UI', severity: 'LOW', status: 'RESOLVED', targetHours: 12, reporter: 'Dev Portal', dept: 'Cloud Infrastructure', createdAt: '2026-11-04T14:00:00' },
   ]);
 
+  // 5. Governance Approvals (PDF Section 6.6)
   const [approvals, setApprovals] = useState([
     { id: 1, code: 'APR-101', title: 'Production Database Schema Migration', category: 'DEPLOYMENT', projectCode: 'PRJ-102', requester: 'Karthik Swaminathan', approver: 'Anita Rao', status: 'APPROVED', notes: 'Executes Flyway V2 script adding foreign keys to transaction logs' },
     { id: 2, code: 'APR-102', title: 'Allocate 15 Story Points for OAuth2 Refactor', category: 'BUDGET', projectCode: 'PRJ-101', requester: 'Yuvraj V', approver: 'Anita Rao', status: 'APPROVED', notes: 'Scope extension for enterprise Azure AD single sign-on federation' },
@@ -130,13 +132,17 @@ function AppContent() {
     { id: 4, code: 'APR-104', title: 'External Security Penetration Test Access', category: 'SECURITY', projectCode: 'PRJ-104', requester: 'Priya Sharma', approver: 'Vikram Mehta', status: 'APPROVED', notes: 'Grant read-only staging VPC access to third-party auditor' },
   ]);
 
+  // 6. Squad Workload (PDF Section 6.8)
   const [workload, setWorkload] = useState([
+    { name: 'Vikram Mehta', squad: 'Security & Governance', points: 8 },
     { name: 'Anita Rao', squad: 'Platform Delivery', points: 6 },
     { name: 'Karthik Swaminathan', squad: 'Platform Core', points: 12 },
     { name: 'Yuvraj V', squad: 'Platform Core', points: 10 },
     { name: 'Priya Sharma', squad: 'Support & Operations', points: 5 },
+    { name: 'Neha Kapoor', squad: 'Quality Assurance', points: 7 },
   ]);
 
+  // 7. Audit Log (PDF Section 10)
   const [auditLogs, setAuditLogs] = useState([
     { id: 1, actor: 'system.bootstrap', action: 'SYSTEM_INIT', target: 'PLATFORM', message: 'Enterprise platform booted with Pure JPA ORM profile', ip: '127.0.0.1', timestamp: '2026-11-05 09:00:00' },
     { id: 2, actor: 'admin', action: 'USER_ROLE_ASSIGNED', target: 'yuvraj.v', message: 'Assigned ROLE_TEAM_MEMBER on Platform Core squad', ip: '192.168.1.10', timestamp: '2026-11-05 09:15:22' },
@@ -144,6 +150,7 @@ function AppContent() {
     { id: 4, actor: 'yuvraj.v', action: 'TASK_STATUS_UPDATE', target: 'TSK-102', message: 'Moved JWT onboarding to DONE (+4 hours effort)', ip: '192.168.1.15', timestamp: '2026-11-05 17:15:00' },
   ]);
 
+  // 8. Reminders Checklist
   const [reminders, setReminders] = useState([
     { id: 1, text: 'Prepare the weekly executive project status report.', done: false },
     { id: 2, text: 'Review action items from yesterday’s team architecture meeting with Karthik.', done: false },
@@ -151,7 +158,7 @@ function AppContent() {
     { id: 4, text: 'Verify Spring Boot 3 pure ORM mappings for task assignment.', done: false },
   ]);
 
-  // Fetch all endpoints
+  // Live Refresh with Backend API
   const refreshAll = useCallback(async () => {
     setIsRefreshing(true);
     try {
@@ -185,7 +192,7 @@ function AppContent() {
     refreshAll();
   }, [refreshAll]);
 
-  // Action handlers
+  // Handlers for Project & Milestones
   const handleCreateProject = async (newProj) => {
     try {
       const res = await api.post('/projects', newProj);
@@ -206,6 +213,7 @@ function AppContent() {
     }
   };
 
+  // Handlers for Tasks & Comments
   const handleCreateTask = async (newT) => {
     try {
       const res = await api.post('/tasks', newT);
@@ -251,6 +259,7 @@ function AppContent() {
     } catch {}
   };
 
+  // Handlers for Tickets & SLA
   const handleCreateTicket = async (newTk) => {
     try {
       const res = await api.post('/tickets', newTk);
@@ -268,6 +277,7 @@ function AppContent() {
     } catch {}
   };
 
+  // Handlers for Approvals
   const handleApprove = async (id) => {
     setApprovals((prev) => prev.map((a) => (a.id === id ? { ...a, status: 'APPROVED' } : a)));
     try {
@@ -282,6 +292,7 @@ function AppContent() {
     } catch {}
   };
 
+  // Reminder toggles
   const handleToggleReminder = (id) => {
     setReminders((prev) => prev.map((r) => (r.id === id ? { ...r, done: !r.done } : r)));
   };
@@ -294,22 +305,19 @@ function AppContent() {
     return <LoginPage onLoginSuccess={() => setActiveTab('dashboard')} />;
   }
 
-  // Titles mapping
+  // Exact 6 Page Titles Mapping
   const titles = {
     dashboard: 'Dashboard',
-    projects: 'Projects',
-    kanban: 'Tasks',
-    milestones: 'Milestones',
-    tickets: 'Service Desk',
-    approvals: 'Approvals',
-    workload: 'Squad Workload',
-    audit: 'Audit Trail',
+    projects: 'Projects & Milestones',
+    kanban: 'Tasks & Kanban',
+    tickets: 'Service Desk & SLA',
+    workload: 'Workload & Approvals',
+    audit: 'Audit & Administration',
   };
 
   const counts = {
     projects: projects.length,
     tasks: tasks.length,
-    milestones: milestones.length,
     tickets: tickets.filter((t) => t.status !== 'RESOLVED').length,
     approvals: approvals.filter((a) => a.status === 'PENDING').length,
   };
@@ -324,6 +332,7 @@ function AppContent() {
       isRefreshing={isRefreshing}
       title={titles[activeTab] || 'Dashboard'}
     >
+      {/* PAGE 1: DASHBOARD */}
       {activeTab === 'dashboard' && (
         <DashboardPage
           projects={projects}
@@ -335,13 +344,21 @@ function AppContent() {
           onOpenNewTask={() => setActiveTab('kanban')}
           onOpenNewProject={() => setActiveTab('projects')}
           onNavigate={setActiveTab}
+          onUpdateTaskStatus={handleMoveTask}
         />
       )}
 
+      {/* PAGE 2: PROJECTS & MILESTONES (UNIFIED) */}
       {activeTab === 'projects' && (
-        <ProjectsPage projects={projects} onCreateProject={handleCreateProject} />
+        <ProjectsPage 
+          projects={projects} 
+          milestones={milestones}
+          onCreateProject={handleCreateProject}
+          onCreateMilestone={handleCreateMilestone}
+        />
       )}
 
+      {/* PAGE 3: TASKS & KANBAN WITH COLLABORATION */}
       {activeTab === 'kanban' && (
         <KanbanPage
           tasks={tasks}
@@ -351,10 +368,7 @@ function AppContent() {
         />
       )}
 
-      {activeTab === 'milestones' && (
-        <MilestonesPage milestones={milestones} onCreateMilestone={handleCreateMilestone} />
-      )}
-
+      {/* PAGE 4: SERVICE DESK & SLA */}
       {activeTab === 'tickets' && (
         <ServiceDeskPage
           tickets={tickets}
@@ -363,13 +377,20 @@ function AppContent() {
         />
       )}
 
-      {activeTab === 'approvals' && (
-        <ApprovalsPage approvals={approvals} onApprove={handleApprove} onReject={handleReject} />
+      {/* PAGE 5: WORKLOAD & GOVERNANCE APPROVALS (UNIFIED) */}
+      {activeTab === 'workload' && (
+        <WorkloadPage 
+          workload={workload} 
+          approvals={approvals}
+          onApprove={handleApprove}
+          onReject={handleReject}
+        />
       )}
 
-      {activeTab === 'workload' && <SquadWorkloadPage workload={workload} />}
-
-      {activeTab === 'audit' && <AuditTrailPage auditLogs={auditLogs} />}
+      {/* PAGE 6: AUDIT & RBAC ADMINISTRATION */}
+      {activeTab === 'audit' && (
+        <AuditPage auditLogs={auditLogs} />
+      )}
     </AppShell>
   );
 }

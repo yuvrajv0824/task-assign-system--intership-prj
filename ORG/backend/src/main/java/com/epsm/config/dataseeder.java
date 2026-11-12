@@ -90,9 +90,9 @@ public class dataseeder {
                 // 5. seed tasks with realistic estimated effort hours
                 if (taskrepo.count() == 0) {
                     taskrepo.save(new task("TSK-01", "Spring Boot 3 pure ORM setup", "Configure JPA and H2 profile with Hibernate", "HIGH", 8, "DONE", "Yuvraj V", "Platform Core", "Anita Rao", p1));
-                    taskrepo.save(new task("TSK-02", "Baseentity auditing timestamps", "Auto-generated @CreatedDate and @LastModifiedDate", "MEDIUM", 4, "REVIEW", "Karthik Swaminathan", "Core Platform Squad", "Vikram Mehta", p1));
+                    taskrepo.save(new task("TSK-02", "BaseEntity auditing timestamps", "Auto-generated @CreatedDate and @LastModifiedDate", "MEDIUM", 4, "REVIEW", "Karthik Swaminathan", "Core Platform Squad", "Vikram Mehta", p1));
                     taskrepo.save(new task("TSK-04", "SLA countdown calculation service", "Engine to trigger warning at 75% elapsed resolution time", "HIGH", 16, "IN_PROGRESS", "Yuvraj V", "Platform Core", "Anita Rao", p3));
-                    taskrepo.save(new task("TSK-05", "Stateless JWT filter integration", "Validate Bearer token on all secured endpoints", "CRITICAL", 16, "IN_PROGRESS", "Yuvraj V", "Platform Core", "Karthik Swaminathan", p1));
+                    taskrepo.save(new task("TSK-05", "Stateless JWT filter integration", "Validate Bearer token on all secured endpoints", "CRITICAL", 8, "IN_PROGRESS", "Yuvraj V", "Platform Core", "Karthik Swaminathan", p1));
                     taskrepo.save(new task("TSK-08", "PostgreSQL connection pooling", "HikariCP pool sizing and leak detection threshold", "HIGH", 8, "TODO", "Karthik Swaminathan", "Core Platform Squad", "Vikram Mehta", p2));
                     taskrepo.save(new task("TSK-09", "User role permission matrix", "Map 5 enterprise roles to authorized endpoints", "MEDIUM", 8, "TODO", "Anita Rao", "Project Management Office", "Vikram Mehta", p1));
                     taskrepo.save(new task("TSK-12", "Audit log export to CSV", "Export project audit trails for compliance reporting", "LOW", 4, "BACKLOG", "Yuvraj V", "Platform Core", "Anita Rao", p2));

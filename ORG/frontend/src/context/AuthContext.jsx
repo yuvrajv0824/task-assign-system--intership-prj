@@ -65,12 +65,17 @@ export function AuthProvider({ children }) {
     const saved = localStorage.getItem('epsm_user');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Verify user exists in valid corporate personas (auto-clears any obsolete personas like Rishab Shetty)
+        const validPersona = SEED_PERSONAS.find(
+          (p) => p.name === parsed.name || p.username === parsed.username
+        );
+        if (validPersona) return validPersona;
       } catch {
-        return SEED_PERSONAS[0];
+        // Corrupted JSON fallback
       }
     }
-    return SEED_PERSONAS[0]; // Default to Yuvraj V
+    return SEED_PERSONAS[0]; // Default cleanly to Yuvraj V
   });
 
   const [token, setToken] = useState(() => localStorage.getItem('epsm_jwt_token') || null);
