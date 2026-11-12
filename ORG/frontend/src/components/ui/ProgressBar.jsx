@@ -19,7 +19,7 @@ export function ProgressBar({
   return (
     <div className={`w-full bg-border rounded-full h-1 overflow-hidden ${className}`}>
       <div
-        className={`h-1 rounded-full transition-all duration-300 ease-out ${variants[variant] || variants.accent}`}
+        className={`h-1 rounded-full transition-[width] duration-300 ease-out ${variants[variant] || variants.accent}`}
         style={{ width: `${percent}%` }}
       />
     </div>

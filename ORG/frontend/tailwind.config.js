@@ -28,19 +28,19 @@ export default {
         },
         status: {
           success: {
-            DEFAULT: '#2F7D5B',
+            DEFAULT: '#10b981',
             bg: 'var(--status-success-bg)',
           },
           warning: {
-            DEFAULT: '#B7791F',
+            DEFAULT: '#f59e0b',
             bg: 'var(--status-warning-bg)',
           },
           danger: {
-            DEFAULT: '#B4443C',
+            DEFAULT: '#ef4444',
             bg: 'var(--status-danger-bg)',
           },
           info: {
-            DEFAULT: '#3E5C8A',
+            DEFAULT: '#2563eb',
             bg: 'var(--status-info-bg)',
           },
         },

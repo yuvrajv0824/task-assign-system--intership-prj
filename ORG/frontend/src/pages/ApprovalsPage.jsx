@@ -3,7 +3,7 @@ import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
-import { Check, X, ShieldAlert, FileCheck2 } from 'lucide-react';
+import { Check, X, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
@@ -36,9 +36,9 @@ export function ApprovalsPage({ approvals, onApprove, onReject }) {
         <div className="pt-2">
           <Button
             size="sm"
-            onClick={() => switchPersona('Puneeth Rajkumar')}
+            onClick={() => switchPersona('Anita Rao')}
           >
-            Switch to Puneeth Rajkumar (Project Manager)
+            Switch to Anita Rao (Project Manager)
           </Button>
         </div>
       </div>
@@ -60,13 +60,13 @@ export function ApprovalsPage({ approvals, onApprove, onReject }) {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-border bg-bg-subtle text-text-faint uppercase tracking-[0.06em] text-[11px] h-11">
-                <th className="px-5 font-semibold">Request Code</th>
-                <th className="px-4 font-semibold">Title &amp; Justification</th>
-                <th className="px-4 font-semibold">Type</th>
-                <th className="px-4 font-semibold">Requester</th>
-                <th className="px-4 font-semibold">Status</th>
-                <th className="px-5 font-semibold text-right">Actions</th>
+              <tr className="border-b border-border bg-bg-subtle text-text-muted text-xs h-10">
+                <th className="px-5 font-medium">Request code</th>
+                <th className="px-4 font-medium">Title &amp; justification</th>
+                <th className="px-4 font-medium">Type</th>
+                <th className="px-4 font-medium">Requester</th>
+                <th className="px-4 font-medium">Status</th>
+                <th className="px-5 font-medium text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -141,8 +141,8 @@ export function ApprovalsPage({ approvals, onApprove, onReject }) {
           </p>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-              Rejection Reason
+            <label className="block text-xs font-medium text-text-muted mb-1">
+              Rejection reason
             </label>
             <textarea
               rows={3}

@@ -2,6 +2,7 @@
 #file name / is skip gits push
 EXP/
 ignore/
+*.zip
 
 # Build & Dependencies
 **/target/

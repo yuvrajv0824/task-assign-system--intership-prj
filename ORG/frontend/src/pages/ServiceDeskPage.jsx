@@ -75,13 +75,13 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-border bg-bg-subtle text-text-faint uppercase tracking-[0.06em] text-[11px] h-11">
-                <th className="px-5 font-semibold">Ticket Code</th>
-                <th className="px-4 font-semibold">Incident Subject</th>
-                <th className="px-4 font-semibold">Severity</th>
-                <th className="px-4 font-semibold">Reporter / Dept</th>
-                <th className="px-4 font-semibold">Status</th>
-                <th className="px-5 font-semibold w-56">SLA Countdown</th>
+              <tr className="border-b border-border bg-bg-subtle text-text-muted text-xs h-10">
+                <th className="px-5 font-medium">Ticket code</th>
+                <th className="px-4 font-medium">Incident subject</th>
+                <th className="px-4 font-medium">Severity</th>
+                <th className="px-4 font-medium">Reporter / dept</th>
+                <th className="px-4 font-medium">Status</th>
+                <th className="px-5 font-medium w-56">SLA countdown</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -158,7 +158,7 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
         {selectedTicket && (
           <div className="space-y-5">
             <div>
-              <span className="text-xs uppercase tracking-[0.06em] text-text-faint font-semibold block mb-1">
+              <span className="text-xs text-text-muted font-medium block mb-1">
                 Subject
               </span>
               <h3 className="text-base font-semibold text-text">{selectedTicket.subject}</h3>
@@ -176,8 +176,8 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
             </div>
 
             <div>
-              <span className="text-xs uppercase tracking-[0.06em] text-text-faint font-semibold block mb-2">
-                SLA Compliance Engine
+              <span className="text-xs text-text-muted font-medium block mb-2">
+                SLA compliance engine
               </span>
               <div className="p-3 bg-bg-subtle border border-border rounded-input space-y-2">
                 {(() => {
@@ -229,8 +229,8 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Report Service Desk Incident">
         <form onSubmit={handleCreate} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-              Incident Subject
+            <label className="block text-xs font-medium text-text-muted mb-1">
+              Incident subject
             </label>
             <input
               type="text"
@@ -244,7 +244,7 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
+              <label className="block text-xs font-medium text-text-muted mb-1">
                 Severity
               </label>
               <select
@@ -260,8 +260,8 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-                Target SLA (Hours)
+              <label className="block text-xs font-medium text-text-muted mb-1">
+                Target SLA (hours)
               </label>
               <input
                 type="number"
@@ -276,7 +276,7 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
+              <label className="block text-xs font-medium text-text-muted mb-1">
                 Reporter
               </label>
               <input
@@ -289,7 +289,7 @@ export function ServiceDeskPage({ tickets, onResolveTicket, onCreateTicket }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
+              <label className="block text-xs font-medium text-text-muted mb-1">
                 Department
               </label>
               <input

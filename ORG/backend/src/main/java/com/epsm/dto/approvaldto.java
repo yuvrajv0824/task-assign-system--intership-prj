@@ -25,7 +25,7 @@ public class approvaldto {
         @NotBlank(message = "Requester name is required")
         private String requester;
 
-        private String approver = "Puneeth Rajkumar";
+        private String approver = "Anita Rao";
         private String priority = "MEDIUM";
         private String notes;
 

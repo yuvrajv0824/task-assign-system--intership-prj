@@ -42,7 +42,7 @@ public class approvalcontroller {
                 req.getCategory() != null ? req.getCategory().toUpperCase() : "DEPLOYMENT",
                 req.getProjectCode() != null ? req.getProjectCode() : "PRJ-101",
                 req.getRequester(),
-                req.getApprover() != null ? req.getApprover() : "Puneeth Rajkumar",
+                req.getApprover() != null ? req.getApprover() : "Anita Rao",
                 "PENDING",
                 req.getPriority() != null ? req.getPriority().toUpperCase() : "MEDIUM",
                 req.getNotes()

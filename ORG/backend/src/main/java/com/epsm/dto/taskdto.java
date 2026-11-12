@@ -28,7 +28,7 @@ public class taskdto {
         private String assignee;
 
         private String team = "Platform Core";
-        private String mentor = "Puneeth Rajkumar";
+        private String mentor = "Karthik Swaminathan";
 
         private String projectCode;
 

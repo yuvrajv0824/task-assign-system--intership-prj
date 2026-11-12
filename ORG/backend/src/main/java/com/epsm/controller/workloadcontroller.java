@@ -19,14 +19,14 @@ public class workloadcontroller {
 
     private final taskrepo taskrepo;
 
-    // 2. static developer roster definition (Kannada cinema icons & Yuvraj V per user requirement)
+    // 2. static developer roster definition (Enterprise hierarchy per PDF specification)
     private record DeveloperProfile(String name, String role, String team, String mentor) {}
 
     private static final List<DeveloperProfile> ROSTER = List.of(
-            new DeveloperProfile("Puneeth Rajkumar", "Project Lead & Architect", "Platform Architecture", "Self / Lead"),
-            new DeveloperProfile("Yuvraj V", "Senior Java Backend Engineer", "Platform Core", "Puneeth Rajkumar"),
-            new DeveloperProfile("Yash", "DevOps & Cloud Engineer", "Cloud Infrastructure", "Puneeth Rajkumar"),
-            new DeveloperProfile("Rishab Shetty", "Security & Full-Stack Engineer", "Security & Auth", "Puneeth Rajkumar")
+            new DeveloperProfile("Anita Rao", "Project Manager & Architect", "Platform Delivery", "Vikram Mehta"),
+            new DeveloperProfile("Karthik Swaminathan", "Engineering Team Lead", "Platform Core", "Anita Rao"),
+            new DeveloperProfile("Yuvraj V", "Full Stack Software Engineer", "Platform Core", "Karthik Swaminathan"),
+            new DeveloperProfile("Priya Sharma", "Service Desk Specialist", "Support & Operations", "Anita Rao")
     );
 
     public workloadcontroller(taskrepo taskrepo) {

@@ -12,7 +12,7 @@ export function ProjectsPage({ projects, onCreateProject }) {
   const [form, setForm] = useState({
     code: '',
     name: '',
-    lead: 'Puneeth Rajkumar',
+    lead: 'Anita Rao',
     dueDate: '2026-12-15',
     description: '',
   });
@@ -30,7 +30,7 @@ export function ProjectsPage({ projects, onCreateProject }) {
     });
     addToast(`Project ${form.code} created successfully`, 'success');
     setIsModalOpen(false);
-    setForm({ code: '', name: '', lead: 'Puneeth Rajkumar', dueDate: '2026-12-15', description: '' });
+    setForm({ code: '', name: '', lead: 'Anita Rao', dueDate: '2026-12-15', description: '' });
   };
 
   return (
@@ -91,8 +91,8 @@ export function ProjectsPage({ projects, onCreateProject }) {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Project">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-              Project Code
+            <label className="block text-xs font-medium text-text-muted mb-1">
+              Project code
             </label>
             <input
               type="text"
@@ -105,8 +105,8 @@ export function ProjectsPage({ projects, onCreateProject }) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-              Project Name
+            <label className="block text-xs font-medium text-text-muted mb-1">
+              Project name
             </label>
             <input
               type="text"
@@ -119,8 +119,8 @@ export function ProjectsPage({ projects, onCreateProject }) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-              Project Lead
+            <label className="block text-xs font-medium text-text-muted mb-1">
+              Project lead
             </label>
             <input
               type="text"
@@ -132,8 +132,8 @@ export function ProjectsPage({ projects, onCreateProject }) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-              Target Due Date
+            <label className="block text-xs font-medium text-text-muted mb-1">
+              Target due date
             </label>
             <input
               type="date"

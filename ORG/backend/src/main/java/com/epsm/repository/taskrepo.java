@@ -1,6 +1,7 @@
 package com.epsm.repository;
 
 import com.epsm.model.task;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,13 +12,18 @@ import java.util.Optional;
 @Repository
 public interface taskrepo extends JpaRepository<task, Long> {
 
-    // 2. find by unique task code (e.g. PRJ-101-TSK-1)
+    // 2. find all tasks eagerly joining project to prevent N+1 queries
+    @Override
+    @EntityGraph(attributePaths = {"project"})
+    List<task> findAll();
+
+    // 3. find by unique task code (e.g. PRJ-101-TSK-1)
     Optional<task> findByCode(String code);
 
-    // 3. find all tasks by workflow status
+    // 4. find all tasks by workflow status
     List<task> findByStatus(String status);
 
-    // 4. find tasks assigned to mentee / engineer
+    // 5. find tasks assigned to mentee / engineer
     List<task> findByAssignee(String assignee);
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, FolderKanban, CheckSquare, Flag, Clock, FileCheck2, Users, History, Activity, X } from 'lucide-react';
+import { Search, FolderKanban, CheckSquare, Flag, Clock, FileCheck2, Users, History, Activity } from 'lucide-react';
 
 export function CommandPalette({ isOpen, onClose, onNavigate }) {
   const [query, setQuery] = useState('');

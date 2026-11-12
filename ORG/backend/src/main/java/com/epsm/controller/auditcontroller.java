@@ -2,7 +2,6 @@ package com.epsm.controller;
 
 import com.epsm.dto.apires;
 import com.epsm.dto.auditdto;
-import com.epsm.model.auditlog;
 import com.epsm.repository.auditlogrepo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

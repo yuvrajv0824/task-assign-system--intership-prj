@@ -51,13 +51,13 @@ export function MilestonesPage({ milestones, onCreateMilestone }) {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-border bg-bg-subtle text-text-faint uppercase tracking-[0.06em] text-[11px] h-11">
-                <th className="px-5 font-semibold">Milestone Target</th>
-                <th className="px-4 font-semibold">Project</th>
-                <th className="px-4 font-semibold">Owner</th>
-                <th className="px-4 font-semibold">Target Date</th>
-                <th className="px-4 font-semibold">Status</th>
-                <th className="px-5 font-semibold w-48 text-right">Progress</th>
+              <tr className="border-b border-border bg-bg-subtle text-text-muted text-xs h-10">
+                <th className="px-5 font-medium">Milestone target</th>
+                <th className="px-4 font-medium">Project</th>
+                <th className="px-4 font-medium">Owner</th>
+                <th className="px-4 font-medium">Target date</th>
+                <th className="px-4 font-medium">Status</th>
+                <th className="px-5 font-medium w-48 text-right">Progress</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -94,8 +94,8 @@ export function MilestonesPage({ milestones, onCreateMilestone }) {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create Strategic Milestone">
         <form onSubmit={handleCreate} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-              Milestone Title
+            <label className="block text-xs font-medium text-text-muted mb-1">
+              Milestone title
             </label>
             <input
               type="text"
@@ -109,8 +109,8 @@ export function MilestonesPage({ milestones, onCreateMilestone }) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-                Project Code
+              <label className="block text-xs font-medium text-text-muted mb-1">
+                Project code
               </label>
               <input
                 type="text"
@@ -122,7 +122,7 @@ export function MilestonesPage({ milestones, onCreateMilestone }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
+              <label className="block text-xs font-medium text-text-muted mb-1">
                 Owner
               </label>
               <input
@@ -137,8 +137,8 @@ export function MilestonesPage({ milestones, onCreateMilestone }) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
-                Target Date
+              <label className="block text-xs font-medium text-text-muted mb-1">
+                Target date
               </label>
               <input
                 type="date"
@@ -150,7 +150,7 @@ export function MilestonesPage({ milestones, onCreateMilestone }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-[0.06em] text-text mb-1">
+              <label className="block text-xs font-medium text-text-muted mb-1">
                 Progress (%)
               </label>
               <input

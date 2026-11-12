@@ -39,12 +39,12 @@ public class task extends baseentity {
     @Column(length = 50)
     private String team = "Platform Core";
 
-    // 10. supervising mentor name (e.g. Puneeth Rajkumar)
+    // 10. supervising team lead / manager name (e.g. Karthik Swaminathan)
     @Column(length = 50)
-    private String mentor = "Puneeth Rajkumar";
+    private String mentor = "Karthik Swaminathan";
 
     // 11. parent project relationship
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private project project;
 

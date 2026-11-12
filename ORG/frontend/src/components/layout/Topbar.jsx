@@ -24,7 +24,7 @@ export function Topbar({
     {
       id: 2,
       code: 'NTF-102',
-      sender: 'Puneeth Rajkumar',
+      sender: 'Karthik Swaminathan',
       type: 'DIRECT_MESSAGE',
       title: 'Sprint 25 Architecture Review',
       message: 'Review completed. Please verify pure JPA repository queries for sprint metrics.',
@@ -38,7 +38,7 @@ export function Topbar({
       sender: 'DevOps Desk',
       type: 'APPROVAL_REQUEST',
       title: 'Deployment Approval: PRJ-102',
-      message: 'Yash submitted production database schema migration for review.',
+      message: 'Karthik Swaminathan submitted production database schema migration for review.',
       priority: 'HIGH',
       isRead: false,
       time: '3h ago'
@@ -68,7 +68,7 @@ export function Topbar({
     <header className="h-14 border-b border-border bg-surface px-6 flex items-center justify-between sticky top-0 z-20">
       {/* Left: Breadcrumb / Page Title */}
       <div className="flex items-center gap-2">
-        <span className="text-xs uppercase tracking-[0.06em] text-text-faint font-semibold">
+        <span className="text-xs font-mono font-medium text-text-muted">
           EPSM
         </span>
         <span className="text-xs text-text-faint">/</span>

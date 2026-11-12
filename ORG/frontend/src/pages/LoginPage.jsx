@@ -50,7 +50,7 @@ export function LoginPage({ onLoginSuccess }) {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-text uppercase tracking-[0.06em] mb-1.5">
+              <label className="block text-xs font-medium text-text-muted mb-1.5">
                 Username
               </label>
               <input
@@ -64,7 +64,7 @@ export function LoginPage({ onLoginSuccess }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-text uppercase tracking-[0.06em] mb-1.5">
+              <label className="block text-xs font-medium text-text-muted mb-1.5">
                 Password
               </label>
               <input
@@ -88,7 +88,7 @@ export function LoginPage({ onLoginSuccess }) {
 
           {/* Quick Persona Selector for Testing */}
           <div className="pt-4 border-t border-border">
-            <span className="block text-xs uppercase tracking-[0.06em] text-text-faint mb-2">
+            <span className="block text-xs text-text-muted mb-2 font-medium">
               Or sign in as persona
             </span>
             <div className="grid grid-cols-2 gap-1.5">
@@ -117,8 +117,8 @@ export function LoginPage({ onLoginSuccess }) {
 
       {/* Right Column: Quiet Brand Panel */}
       <div className="hidden lg:flex w-1/2 bg-bg-subtle border-l border-border flex-col justify-between p-12">
-        <div className="text-xs uppercase tracking-[0.06em] text-text-faint font-semibold">
-          System Overview
+        <div className="text-xs text-text-muted font-medium">
+          System overview
         </div>
         <div className="space-y-4 max-w-md">
           <blockquote className="text-base text-text font-normal leading-relaxed">
@@ -129,7 +129,7 @@ export function LoginPage({ onLoginSuccess }) {
           </div>
         </div>
         <div className="text-xs text-text-faint">
-          Mentorship Core: Puneeth Rajkumar &bull; Yuvraj V
+          Enterprise Core: Administrator &bull; Project Manager &bull; Team Lead &bull; Service Agent
         </div>
       </div>
     </div>

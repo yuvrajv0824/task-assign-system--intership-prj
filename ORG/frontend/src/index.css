@@ -14,10 +14,10 @@
   --accent: #1E2A44;
   --accent-fg: #FFFFFF;
 
-  --status-success-bg: #E8F3EE;
-  --status-warning-bg: #FBF1DD;
-  --status-danger-bg: #F8E7E5;
-  --status-info-bg: #E9EEF6;
+  --status-success-bg: #ECFDF5;
+  --status-warning-bg: #FFFBEB;
+  --status-danger-bg: #FEF2F2;
+  --status-info-bg: #EFF6FF;
 }
 
 html.dark {
@@ -32,10 +32,10 @@ html.dark {
   --accent: #E8ECF4;
   --accent-fg: #0E1422;
 
-  --status-success-bg: #16322A;
-  --status-warning-bg: #3A2D12;
-  --status-danger-bg: #3B1D1B;
-  --status-info-bg: #1B2740;
+  --status-success-bg: #064E3B;
+  --status-warning-bg: #451A03;
+  --status-danger-bg: #450A0A;
+  --status-info-bg: #1E3A8A;
 }
 
 body {

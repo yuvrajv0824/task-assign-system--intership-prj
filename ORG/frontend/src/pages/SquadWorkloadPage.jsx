@@ -44,7 +44,7 @@ export function SquadWorkloadPage({ workload }) {
               <div className="space-y-1 relative">
                 <div className="w-full bg-border rounded-full h-2 overflow-hidden relative">
                   <div
-                    className={`h-2 rounded-full transition-all duration-300 ${
+                    className={`h-2 rounded-full transition-[width] duration-300 ease-out ${
                       isOverload ? 'bg-status-danger' : 'bg-accent'
                     }`}
                     style={{ width: `${Math.min(100, calc.percent)}%` }}

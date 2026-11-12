@@ -4,6 +4,7 @@ import com.epsm.dto.apires;
 import com.epsm.dto.sprintdto;
 import com.epsm.model.sprint;
 import com.epsm.repository.sprintrepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,9 +71,13 @@ public class sprintcontroller {
     // 4. close/complete an active sprint
     @PutMapping("/{id}/close")
     public ResponseEntity<apires<sprintdto.Res>> closeSprint(@PathVariable Long id) {
-        sprint s = sprintrepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Sprint cycle not found with id: " + id));
+        java.util.Optional<sprint> opt = sprintrepo.findById(id);
+        if (opt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(apires.err("Sprint cycle not found with id: " + id));
+        }
 
+        sprint s = opt.get();
         s.setStatus("COMPLETED");
         sprint saved = sprintrepo.save(s);
         return ResponseEntity.ok(apires.ok("Sprint cycle completed", sprintdto.Res.from(saved)));

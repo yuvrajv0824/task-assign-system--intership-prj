@@ -116,12 +116,12 @@ export function AuditTrailPage({ auditLogs }) {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-border bg-bg-subtle text-text-faint uppercase tracking-[0.06em] text-[11px] h-10">
-                <th className="px-4 font-semibold">Timestamp</th>
-                <th className="px-4 font-semibold">Actor</th>
-                <th className="px-4 font-semibold">Action</th>
-                <th className="px-4 font-semibold">Target / Description</th>
-                <th className="px-4 font-semibold font-mono">IP Address</th>
+              <tr className="border-b border-border bg-bg-subtle text-text-muted text-xs h-10">
+                <th className="px-4 font-medium">Timestamp</th>
+                <th className="px-4 font-medium">Actor</th>
+                <th className="px-4 font-medium">Action</th>
+                <th className="px-4 font-medium">Target / description</th>
+                <th className="px-4 font-medium font-mono">IP address</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
