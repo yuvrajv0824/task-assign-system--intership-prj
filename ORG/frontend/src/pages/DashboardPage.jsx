@@ -43,6 +43,12 @@ export function DashboardPage({
   const currentHour = new Date().getHours();
   const greetingTime = currentHour < 12 ? 'Good morning' : currentHour < 17 ? 'Good afternoon' : 'Good evening';
   const firstName = user?.name ? user.name.split(' ')[0] : 'Engineer';
+  const todayDateFormatted = new Intl.DateTimeFormat('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(new Date());
 
   // Sprint velocity data for smooth AreaChart
   const velocityData = [
@@ -80,7 +86,7 @@ export function DashboardPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-xs text-text-muted">
-            <span className="font-semibold text-text">Thursday, 12 November 2026</span>
+            <span className="font-semibold text-text">{todayDateFormatted}</span>
             <span className="text-text-faint">&bull;</span>
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold text-[11px] border border-blue-500/20">
               <span className="relative flex h-1.5 w-1.5">
