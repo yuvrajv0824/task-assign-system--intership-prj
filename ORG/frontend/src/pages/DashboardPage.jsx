@@ -18,8 +18,7 @@ import {
   Activity,
   Plus,
   ArrowUpRight,
-  TrendingUp,
-  Sparkles
+  TrendingUp
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { useAuth } from '../context/AuthContext';
@@ -64,6 +63,19 @@ export function DashboardPage({
     if (!t.assignee) return false;
     return t.assignee.toLowerCase().includes(firstName.toLowerCase());
   });
+
+  // Dynamic portfolio & sprint metrics with fallback defaults
+  const projectCount = projects.length || 24;
+  const atRiskCount = projects.filter((p) => p.health === 'AT_RISK').length || 4;
+  const avgProgress = projects.length
+    ? Math.round(projects.reduce((acc, p) => acc + (p.progress || 0), 0) / projects.length)
+    : 85;
+
+  const totalTasksCount = tasks.length || 186;
+  const doneTasksCount = tasks.filter((t) => t.status === 'DONE').length;
+  const donePercent = tasks.length
+    ? Math.round((doneTasksCount / tasks.length) * 100)
+    : 88;
 
   // Cycle status on click
   const handleCycleTaskStatus = (task) => {
@@ -133,14 +145,14 @@ export function DashboardPage({
               <FolderKanban className="w-4 h-4 text-blue-500" />
               Active Portfolio
             </span>
-            <Badge variant="info">24 Total</Badge>
+            <Badge variant="info">{projects.length ? `${projects.length} Total` : '24 Total'}</Badge>
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-text tabular-nums tracking-tight">24</span>
-            <span className="text-xs font-semibold text-amber-500">4 at risk</span>
+            <span className="text-2xl font-bold text-text tabular-nums tracking-tight">{projectCount}</span>
+            <span className="text-xs font-semibold text-amber-500">{atRiskCount} at risk</span>
           </div>
           <div className="pt-1">
-            <ProgressBar value={85} variant="info" />
+            <ProgressBar value={avgProgress} variant="info" />
           </div>
           <div className="text-[11px] text-text-faint flex justify-between">
             <span>Core Banking &amp; Fintech</span>
@@ -155,14 +167,16 @@ export function DashboardPage({
               <CheckSquare className="w-4 h-4 text-emerald-500" />
               Sprint Tasks
             </span>
-            <Badge variant="success">88% Done</Badge>
+            <Badge variant="success">{donePercent}% Done</Badge>
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-text tabular-nums tracking-tight">186</span>
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">+14 closed today</span>
+            <span className="text-2xl font-bold text-text tabular-nums tracking-tight">{totalTasksCount}</span>
+            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              {tasks.length ? `${doneTasksCount} closed` : '+14 closed today'}
+            </span>
           </div>
           <div className="pt-1">
-            <ProgressBar value={88} variant="success" />
+            <ProgressBar value={donePercent} variant="success" />
           </div>
           <div className="text-[11px] text-text-faint flex justify-between">
             <span>5 Squads active</span>
