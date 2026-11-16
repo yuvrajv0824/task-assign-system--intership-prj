@@ -28,6 +28,7 @@ export function DashboardPage({
   projects = [],
   tasks = [],
   milestones = [],
+  workload = [],
   reminders = [],
   onToggleReminder,
   onDeleteReminder,
@@ -76,6 +77,15 @@ export function DashboardPage({
   const donePercent = tasks.length
     ? Math.round((doneTasksCount / tasks.length) * 100)
     : 88;
+
+  // Dynamic squad workload calculations
+  const squadAllocatedHours = workload.reduce((acc, dev) => {
+    const pts = dev.activePoints ?? dev.points ?? 0;
+    return acc + (pts * 4);
+  }, 0) || 36;
+  const squadCapacityHours = (workload.length || 1) * 40;
+  const squadUtilization = Math.round((squadAllocatedHours / squadCapacityHours) * 100);
+  const squadBufferHours = Math.max(0, squadCapacityHours - squadAllocatedHours);
 
   // Cycle status on click
   const handleCycleTaskStatus = (task) => {
@@ -213,17 +223,17 @@ export function DashboardPage({
               <Users className="w-4 h-4 text-indigo-500" />
               Squad Bandwidth
             </span>
-            <Badge variant="neutral" className="whitespace-nowrap">36h / 40h</Badge>
+            <Badge variant="neutral" className="whitespace-nowrap">{squadAllocatedHours}h / {squadCapacityHours}h</Badge>
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-text tabular-nums tracking-tight">90%</span>
-            <span className="text-xs font-semibold text-text-muted">4h buffer</span>
+            <span className="text-2xl font-bold text-text tabular-nums tracking-tight">{squadUtilization}%</span>
+            <span className="text-xs font-semibold text-text-muted">{squadBufferHours}h buffer</span>
           </div>
           <div className="pt-1">
-            <ProgressBar value={90} variant="accent" />
+            <ProgressBar value={squadUtilization} variant={squadUtilization > 100 ? 'danger' : 'accent'} />
           </div>
           <div className="text-[11px] text-text-faint flex justify-between">
-            <span>48 engineers</span>
+            <span>{workload.length || 4} engineers</span>
             <span className="text-indigo-600 dark:text-indigo-400 font-semibold cursor-pointer" onClick={() => onNavigate('workload')}>Squads &rarr;</span>
           </div>
         </Card>

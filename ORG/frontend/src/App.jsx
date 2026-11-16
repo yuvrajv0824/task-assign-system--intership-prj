@@ -338,6 +338,7 @@ function AppContent() {
           projects={projects}
           tasks={tasks}
           milestones={milestones}
+          workload={workload}
           reminders={reminders}
           onToggleReminder={handleToggleReminder}
           onDeleteReminder={handleDeleteReminder}

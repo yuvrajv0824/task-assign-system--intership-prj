@@ -43,6 +43,20 @@ export function WorkloadPage({
 
   const pendingApprovals = approvals.filter((a) => a.status === 'PENDING');
 
+  // Squad capacity metrics (40h weekly limit per developer)
+  const totalAllocatedHours = workload.reduce((acc, dev) => {
+    const pts = dev.activePoints ?? dev.points ?? 0;
+    return acc + (pts * 4);
+  }, 0);
+  const totalCapacityHours = (workload.length || 4) * 40;
+  const overallUtilization = totalCapacityHours > 0
+    ? Math.round((totalAllocatedHours / totalCapacityHours) * 100)
+    : 0;
+  const overloadedDevs = workload.filter((dev) => {
+    const pts = dev.activePoints ?? dev.points ?? 0;
+    return (pts * 4) > 40;
+  });
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Page Header */}
@@ -105,19 +119,67 @@ export function WorkloadPage({
             <span className="text-xs text-text-faint font-medium">Standard threshold: 40 hours / sprint</span>
           </div>
 
+          {/* Capacity Summary KPI Bar */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Card className="p-4 space-y-1.5 rounded-2xl border border-border/80">
+              <div className="flex items-center justify-between text-xs text-text-muted font-medium">
+                <span>Total Squad Load</span>
+                <span className="tabular-nums font-bold text-text">{overallUtilization}%</span>
+              </div>
+              <div className="text-xl font-bold text-text tabular-nums">
+                {totalAllocatedHours}h <span className="text-xs text-text-faint font-normal">/ {totalCapacityHours}h</span>
+              </div>
+              <ProgressBar value={overallUtilization} variant={overallUtilization > 100 ? 'danger' : 'info'} />
+            </Card>
+
+            <Card className="p-4 space-y-1.5 rounded-2xl border border-border/80">
+              <div className="flex items-center justify-between text-xs text-text-muted font-medium">
+                <span>Monitored Squad</span>
+                <Badge variant="neutral">{workload.length} Engineers</Badge>
+              </div>
+              <div className="text-xl font-bold text-text">
+                {workload.length - overloadedDevs.length} <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Optimal</span>
+              </div>
+              <div className="text-[11px] text-text-faint">
+                Standard 40h weekly capacity
+              </div>
+            </Card>
+
+            <Card className="p-4 space-y-1.5 rounded-2xl border border-border/80">
+              <div className="flex items-center justify-between text-xs text-text-muted font-medium">
+                <span>Burnout Risk</span>
+                <Badge variant={overloadedDevs.length > 0 ? 'danger' : 'success'} dot>
+                  {overloadedDevs.length > 0 ? `${overloadedDevs.length} Overload` : 'All Balanced'}
+                </Badge>
+              </div>
+              <div className="text-xl font-bold text-text tabular-nums">
+                {overloadedDevs.length > 0 ? `${overloadedDevs.length} Exceeded` : '0 Breaches'}
+              </div>
+              <div className="text-[11px] text-text-faint">
+                {overloadedDevs.length > 0 ? 'Rebalance sprint assignments' : 'Capacity within safety threshold'}
+              </div>
+            </Card>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {workload.map((dev) => {
-              const calc = calculateWorkload(dev.points || 0, 40);
+              const points = dev.activePoints ?? dev.points ?? 0;
+              const calc = calculateWorkload(points, 40);
               const isOverload = calc.isOverload;
+              const isBurnoutRisk = calc.isBurnoutRisk;
+              const squadName = dev.team || dev.squad || 'Platform Core';
 
               return (
                 <Card key={dev.name} className="space-y-3.5 p-5 rounded-2xl border border-border/80 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-start justify-between gap-2">
                     <div>
                       <h3 className="text-sm font-bold text-text truncate">{dev.name}</h3>
-                      <p className="text-[11px] text-text-muted truncate font-medium">{dev.squad}</p>
+                      <p className="text-[11px] text-text-muted truncate font-medium">{squadName}</p>
+                      {dev.mentor && (
+                        <p className="text-[10px] text-text-faint truncate mt-0.5">Mentor: {dev.mentor}</p>
+                      )}
                     </div>
-                    <Badge variant={isOverload ? 'danger' : 'success'} dot>
+                    <Badge variant={isOverload ? 'danger' : calc.status === 'HIGH' ? 'warning' : 'success'} dot>
                       {calc.status}
                     </Badge>
                   </div>
@@ -133,7 +195,7 @@ export function WorkloadPage({
                     <div className="w-full bg-border/60 rounded-full h-2 overflow-hidden">
                       <div
                         className={`h-2 rounded-full transition-all duration-300 ${
-                          isOverload ? 'bg-rose-500' : 'bg-blue-600'
+                          isOverload ? 'bg-rose-500' : calc.status === 'HIGH' ? 'bg-amber-500' : 'bg-blue-600'
                         }`}
                         style={{ width: `${Math.min(100, calc.percent)}%` }}
                       />
@@ -147,8 +209,26 @@ export function WorkloadPage({
 
                   {isOverload && (
                     <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-[11px] flex items-center justify-between font-medium">
-                      <span>Exceeded by {calc.hours - 40}h</span>
-                      <span className="font-bold underline cursor-pointer">Rebalance</span>
+                      <span className="flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{isBurnoutRisk ? 'Burnout risk: ' : ''}Exceeded by {calc.hours - 40}h</span>
+                      </span>
+                      <span className="font-bold underline cursor-pointer" onClick={() => addToast(`Rebalancing triggered for ${dev.name}`, 'info')}>Rebalance</span>
+                    </div>
+                  )}
+
+                  {dev.tasks && dev.tasks.length > 0 && (
+                    <div className="pt-2 border-t border-border/40 space-y-1.5">
+                      <span className="text-[10px] font-semibold text-text-faint uppercase tracking-wider block">Assigned Tasks ({dev.tasks.length})</span>
+                      <div className="space-y-1">
+                        {dev.tasks.slice(0, 2).map((t) => (
+                          <div key={t.code} className="flex items-center justify-between text-[11px] text-text-muted bg-bg-subtle/60 px-2 py-1 rounded-lg">
+                            <span className="font-mono text-[10px] text-blue-600 dark:text-blue-400 font-semibold">{t.code}</span>
+                            <span className="truncate max-w-[140px]">{t.title}</span>
+                            <span className="text-text-faint text-[10px] tabular-nums">{t.points}p</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </Card>
