@@ -26,9 +26,18 @@ export function calculateSla(createdAt, targetHours = 8, status = 'IN_PROGRESS')
   const isWarning = percent >= 75 && percent < 100;
   const isBreached = percent >= 100 || remainingMinutes === 0;
 
-  let badgeText = `${remainingMinutes}m left`;
-  if (isBreached) badgeText = 'SLA Breached';
-  else if (isWarning) badgeText = 'Breaching soon';
+  let badgeText = '';
+  if (isBreached) {
+    badgeText = 'SLA Breached';
+  } else if (isWarning) {
+    badgeText = remainingMinutes > 60
+      ? `${Math.floor(remainingMinutes / 60)}h ${remainingMinutes % 60}m left (Warning)`
+      : `${remainingMinutes}m left (Warning)`;
+  } else {
+    badgeText = remainingMinutes > 60
+      ? `${Math.floor(remainingMinutes / 60)}h ${remainingMinutes % 60}m left`
+      : `${remainingMinutes}m left`;
+  }
 
   return {
     status,

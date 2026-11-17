@@ -14,7 +14,8 @@ import {
   Search, 
   Filter,
   Check,
-  Zap
+  Zap,
+  Download
 } from 'lucide-react';
 import { calculateSla } from '../utils/sla';
 import { useCountdown } from '../hooks/useCountdown';
@@ -32,9 +33,33 @@ export function ServiceDeskPage({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [severityFilter, setSeverityFilter] = useState('ALL');
+  const [statusFilter, setStatusFilter] = useState('ALL');
   const [resolutionNotes, setResolutionNotes] = useState('');
   
   useCountdown(10000);
+
+  const exportTicketsCsv = () => {
+    const headers = ['Code', 'Subject', 'Severity', 'Reporter', 'Dept', 'Status', 'TargetHours', 'CreatedAt'];
+    const rows = filteredTickets.map((t) => [
+      `"${t.code || ''}"`,
+      `"${(t.subject || '').replace(/"/g, '""')}"`,
+      `"${t.severity || 'MEDIUM'}"`,
+      `"${t.reporter || ''}"`,
+      `"${t.dept || ''}"`,
+      `"${t.status || 'IN_PROGRESS'}"`,
+      `"${t.targetHours || 8}"`,
+      `"${t.createdAt || ''}"`
+    ]);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `epsm_servicedesk_tickets_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    addToast('Incident tickets exported to CSV', 'success');
+  };
 
   const [form, setForm] = useState({
     subject: '',
@@ -97,11 +122,28 @@ export function ServiceDeskPage({
       t.code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.reporter?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesSeverity = severityFilter === 'ALL' || t.severity === severityFilter;
-    return matchesSearch && matchesSeverity;
+    
+    if (!matchesSearch || !matchesSeverity) return false;
+    if (statusFilter === 'ALL') return true;
+    if (statusFilter === 'RESOLVED') return t.status === 'RESOLVED';
+    if (statusFilter === 'ACTIVE') return t.status !== 'RESOLVED';
+
+    const sla = calculateSla(t.createdAt || '2026-11-05T08:00:00', t.targetHours || 8, t.status);
+    if (statusFilter === 'BREACHED') return sla.isBreached && t.status !== 'RESOLVED';
+    if (statusFilter === 'WARNING') return sla.isWarning && t.status !== 'RESOLVED';
+    return true;
   });
 
   const activeCount = tickets.filter((t) => t.status !== 'RESOLVED').length;
   const criticalCount = tickets.filter((t) => (t.severity === 'CRITICAL' || t.severity === 'HIGH') && t.status !== 'RESOLVED').length;
+  const breachedCount = tickets.filter((t) => {
+    if (t.status === 'RESOLVED') return false;
+    const sla = calculateSla(t.createdAt || '2026-11-05T08:00:00', t.targetHours || 8, t.status);
+    return sla.isBreached;
+  }).length;
+  const complianceRate = tickets.length > 0
+    ? Math.max(0, Math.round(((tickets.length - breachedCount) / tickets.length) * 1000) / 10)
+    : 98.5;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -114,14 +156,25 @@ export function ServiceDeskPage({
           </p>
         </div>
 
-        <Button 
-          onClick={() => setIsModalOpen(true)} 
-          size="sm"
-          className="rounded-xl shadow-sm bg-blue-600 hover:bg-blue-500 text-white"
-        >
-          <Plus className="w-3.5 h-3.5 mr-1" strokeWidth={2} />
-          <span>Report Incident</span>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={exportTicketsCsv}
+            size="sm"
+            variant="secondary"
+            className="rounded-xl shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 mr-1" />
+            <span>Export CSV</span>
+          </Button>
+          <Button 
+            onClick={() => setIsModalOpen(true)} 
+            size="sm"
+            className="rounded-xl shadow-sm bg-blue-600 hover:bg-blue-500 text-white"
+          >
+            <Plus className="w-3.5 h-3.5 mr-1" strokeWidth={2} />
+            <span>Report Incident</span>
+          </Button>
+        </div>
       </div>
 
       {/* SLA Metric Highlights */}
@@ -149,8 +202,10 @@ export function ServiceDeskPage({
             <span>SLA Compliance</span>
             <Zap className="w-4 h-4 text-amber-500" />
           </div>
-          <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 tabular-nums">98.5%</div>
-          <p className="text-[11px] text-text-faint font-medium">Target &gt; 95%</p>
+          <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 tabular-nums">{complianceRate}%</div>
+          <p className="text-[11px] text-text-faint font-medium">
+            {breachedCount > 0 ? `${breachedCount} breached` : 'Target > 95%'}
+          </p>
         </Card>
 
         <Card className="p-4 space-y-2 rounded-2xl border border-border/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
@@ -189,6 +244,18 @@ export function ServiceDeskPage({
             <option value="HIGH">High</option>
             <option value="MEDIUM">Medium</option>
             <option value="LOW">Low</option>
+          </select>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3 py-1.5 bg-bg-subtle/70 border border-border/60 rounded-xl text-xs text-text focus:border-accent outline-hidden transition-colors font-medium"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="ACTIVE">Active (In Progress)</option>
+            <option value="WARNING">Warning (&gt; 75% SLA)</option>
+            <option value="BREACHED">Breached (&gt; 100% SLA)</option>
+            <option value="RESOLVED">Resolved</option>
           </select>
         </div>
 
