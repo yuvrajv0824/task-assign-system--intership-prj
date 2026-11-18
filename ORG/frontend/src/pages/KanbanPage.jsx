@@ -3,7 +3,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { Badge } from '../components/ui/Badge';
-import { Plus, MessageSquare, Send, Calendar, Clock, User, ArrowRight, X, Sparkles } from 'lucide-react';
+import { Plus, MessageSquare, Send, Calendar, Clock, User, ArrowRight, X, Search, Filter } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -19,6 +19,9 @@ export function KanbanPage({ tasks = [], onMoveTask, onCreateTask, onAddComment 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [commentText, setCommentText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState('ALL');
+  const [assigneeFilter, setAssigneeFilter] = useState('ALL');
   const { user } = useAuth();
   const { addToast } = useToast();
 
@@ -102,6 +105,22 @@ export function KanbanPage({ tasks = [], onMoveTask, onCreateTask, onAddComment 
     }
   };
 
+  // Dynamic cycle burn metrics and filter derivations
+  const totalSprintHours = tasks.reduce((acc, t) => acc + ((t.points || 2) * 4), 0) || 88;
+  const doneSprintHours = tasks.filter((t) => t.status === 'DONE').reduce((acc, t) => acc + ((t.points || 2) * 4), 0) || 56;
+  const burnPercent = totalSprintHours > 0 ? Math.min(100, Math.round((doneSprintHours / totalSprintHours) * 100)) : 64;
+
+  const assignees = Array.from(new Set(tasks.map((t) => t.assignee).filter(Boolean)));
+
+  const filteredTasks = tasks.filter((t) => {
+    const matchSearch =
+      (t.title && t.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (t.code && t.code.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchPriority = priorityFilter === 'ALL' || t.priority === priorityFilter;
+    const matchAssignee = assigneeFilter === 'ALL' || t.assignee === assigneeFilter;
+    return matchSearch && matchPriority && matchAssignee;
+  });
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Page Header */}
@@ -147,10 +166,10 @@ export function KanbanPage({ tasks = [], onMoveTask, onCreateTask, onAddComment 
         <div className="w-full md:w-64 space-y-1.5 self-start md:self-auto">
           <div className="flex items-center justify-between text-xs text-text-muted">
             <span>Cycle Effort Burn</span>
-            <span className="font-bold text-text tabular-nums">56 / 88 hrs (64%)</span>
+            <span className="font-bold text-text tabular-nums">{doneSprintHours} / {totalSprintHours} hrs ({burnPercent}%)</span>
           </div>
           <div className="w-full bg-border/60 rounded-full h-2 overflow-hidden">
-            <div className="bg-blue-600 h-2 rounded-full transition-all duration-300" style={{ width: '64%' }} />
+            <div className="bg-blue-600 h-2 rounded-full transition-all duration-300" style={{ width: `${burnPercent}%` }} />
           </div>
           <div className="text-[10px] text-text-faint flex justify-between font-medium">
             <span>Start: 09 Nov 2026</span>
@@ -159,12 +178,57 @@ export function KanbanPage({ tasks = [], onMoveTask, onCreateTask, onAddComment 
         </div>
       </div>
 
+      {/* Search & Priority Filter Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-surface/80 backdrop-blur-md border border-border/80 rounded-2xl shadow-xs">
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-text-faint absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 pr-3 py-1.5 bg-bg-subtle/70 border border-border/60 rounded-xl text-xs text-text focus:border-accent outline-hidden w-52 transition-colors"
+            />
+          </div>
+
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+            className="px-3 py-1.5 bg-bg-subtle/70 border border-border/60 rounded-xl text-xs text-text focus:border-accent outline-hidden transition-colors font-medium"
+          >
+            <option value="ALL">All Priorities</option>
+            <option value="CRITICAL">Critical</option>
+            <option value="HIGH">High</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LOW">Low</option>
+          </select>
+
+          {assignees.length > 0 && (
+            <select
+              value={assigneeFilter}
+              onChange={(e) => setAssigneeFilter(e.target.value)}
+              className="px-3 py-1.5 bg-bg-subtle/70 border border-border/60 rounded-xl text-xs text-text focus:border-accent outline-hidden transition-colors font-medium"
+            >
+              <option value="ALL">All Assignees</option>
+              {assignees.map((a) => (
+                <option key={a} value={a}>{a}</option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        <span className="text-xs text-text-faint font-medium">
+          Showing {filteredTasks.length} of {tasks.length} tasks
+        </span>
+      </div>
+
       {/* 5 Column Horizontal Kanban Container (Always side-by-side, never vertically stacked) */}
       <div className="overflow-x-auto pb-6 -mx-1 px-1">
         <div className="grid grid-cols-5 gap-4 min-w-[1180px] items-start">
         {COLUMNS.map((col) => {
-          const colTasks = tasks.filter((t) => t.status === col.id);
-          const colHours = colTasks.reduce((acc, t) => acc + (t.points || 4), 0);
+          const colTasks = filteredTasks.filter((t) => t.status === col.id);
+          const colHours = colTasks.reduce((acc, t) => acc + ((t.points || 2) * 4), 0);
 
           return (
             <div key={col.id} className="bg-bg-subtle/70 backdrop-blur-xs border border-border/70 rounded-2xl p-3.5 flex flex-col min-h-[580px] shadow-2xs">
