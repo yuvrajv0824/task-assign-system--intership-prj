@@ -1,5 +1,10 @@
 ENTERPRISE PROJECT AND SERVICE MANAGEMENT PLATFORM
 
+[![Repository](https://img.shields.io/badge/branch-ongoing-blue)](https://github.com/YUVRAJ0824/task-assign-system--intership-prj/tree/ongoing)
+[![Code Review](https://img.shields.io/badge/code%20review-active-green)](https://github.com/YUVRAJ0824/task-assign-system--intership-prj/pulls)
+[![Backend Issues](https://img.shields.io/badge/backend%20issues-minor%20tracked%20(super%20low)-yellow)](https://github.com/YUVRAJ0824/task-assign-system--intership-prj/issues)
+[![Pull Requests](https://img.shields.io/badge/PRs-welcome-blue)](https://github.com/YUVRAJ0824/task-assign-system--intership-prj/pulls)
+
 A unified Java full-stack enterprise application designed to manage projects, tasks, IT service requests, team workloads, and service-level agreements (SLAs) through a centralised platform.
 
 GITHUB REPOSITORY
@@ -164,3 +169,11 @@ The application follows a full-stack architecture:
 PROJECT PURPOSE
 
 This project demonstrates the development of an integrated enterprise management platform using Java and modern full-stack technologies. It brings project coordination, task governance, IT service management, SLA monitoring, and team workload tracking into a single system.
+
+CODE REVIEW AND ISSUE TRACKING
+
+This repository follows standard software development lifecycle (SDLC) practices with pull request reviews and issue logging:
+
+- Code Review: Active peer reviews on PR branches prior to merging into ongoing.
+- Backend Status: Core business logic and pure JPA ORM verified; minor edge cases (extended RFC regex email validation, audit pagination, optimistic locking) tracked at super-low priority.
+- Issue Management: Standardized issue templates and pull request templates configured for structured tracking.
