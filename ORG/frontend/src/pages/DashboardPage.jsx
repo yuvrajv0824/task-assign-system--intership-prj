@@ -52,11 +52,11 @@ export function DashboardPage({
 
   // Sprint velocity data for smooth AreaChart
   const velocityData = [
-    { sprint: 'Sprint 21', points: 34, target: 40 },
     { sprint: 'Sprint 22', points: 38, target: 40 },
     { sprint: 'Sprint 23', points: 42, target: 40 },
     { sprint: 'Sprint 24', points: 39, target: 40 },
     { sprint: 'Sprint 25', points: 36, target: 40 },
+    { sprint: 'Sprint 26', points: 38, target: 40 },
   ];
 
   // Active user's tasks
@@ -115,7 +115,7 @@ export function DashboardPage({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
               </span>
-              Sprint 25 Active
+              Sprint 26 Active
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text">
@@ -251,7 +251,7 @@ export function DashboardPage({
               <div>
                 <h3 className="text-sm font-bold text-text tracking-tight flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-blue-600" />
-                  Sprint 25 Velocity &amp; Burnup Trend
+                  Sprint 26 Velocity &amp; Burnup Trend
                 </h3>
                 <p className="text-xs text-text-muted mt-0.5">
                   Actual effort burned vs. 40h weekly squad target threshold

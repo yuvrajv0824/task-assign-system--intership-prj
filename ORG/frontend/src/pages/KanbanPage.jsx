@@ -146,20 +146,20 @@ export function KanbanPage({ tasks = [], onMoveTask, onCreateTask, onAddComment 
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-lg bg-blue-500/10">
-              SPR-25
+              SPR-26
             </span>
             <span className="text-[11px] font-mono px-2 py-0.5 rounded-lg bg-bg-subtle text-text-muted border border-border/60">
-              v1.2.0-RC1
+              v1.3.0
             </span>
             <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               Active Cycle
             </span>
           </div>
           <h3 className="text-xs font-bold text-text">
-            Sprint Cycle 25: Enterprise Platform Core &amp; Service Desk SLA
+            Sprint Cycle 26: Executive Analytics &amp; Platform Release
           </h3>
           <p className="text-[11px] text-text-muted">
-            Scope: Complete SLA Warning Engine, Task Collaboration stream, and Pure JPA entity mappings.
+            Scope: Production Analytics, SLA Compliance Monitoring, and Multi-Squad Workload Rebalancing.
           </p>
         </div>
 
@@ -172,8 +172,8 @@ export function KanbanPage({ tasks = [], onMoveTask, onCreateTask, onAddComment 
             <div className="bg-blue-600 h-2 rounded-full transition-all duration-300" style={{ width: `${burnPercent}%` }} />
           </div>
           <div className="text-[10px] text-text-faint flex justify-between font-medium">
-            <span>Start: 09 Nov 2026</span>
-            <span>Ends: 23 Nov 2026</span>
+            <span>Start: 24 Nov 2026</span>
+            <span>Ends: 08 Dec 2026</span>
           </div>
         </div>
       </div>
