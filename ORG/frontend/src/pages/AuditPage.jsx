@@ -21,14 +21,17 @@ export function AuditPage({ auditLogs = [] }) {
   const { user, switchPersona, personas } = useAuth();
   const { addToast } = useToast();
   const [filterActor, setFilterActor] = useState('');
-  const [filterAction, setFilterAction] = useState('');
+  const [filterAction, setFilterAction] = useState('ALL');
+  const [searchDetail, setSearchDetail] = useState('');
 
   const filteredLogs = auditLogs.filter((log) => {
     const actorStr = log.actor || log.username || '';
     const actionStr = log.action || '';
+    const detailStr = log.message || log.details || '';
     const matchActor = filterActor ? actorStr.toLowerCase().includes(filterActor.toLowerCase()) : true;
-    const matchAction = filterAction ? actionStr.toLowerCase().includes(filterAction.toLowerCase()) : true;
-    return matchActor && matchAction;
+    const matchAction = filterAction === 'ALL' || actionStr.includes(filterAction);
+    const matchDetail = searchDetail ? detailStr.toLowerCase().includes(searchDetail.toLowerCase()) : true;
+    return matchActor && matchAction && matchDetail;
   });
 
   const exportCsv = () => {
@@ -193,15 +196,40 @@ export function AuditPage({ auditLogs = [] }) {
           placeholder="Filter by actor (e.g. yuvraj.v)..."
           value={filterActor}
           onChange={(e) => setFilterActor(e.target.value)}
-          className="px-2.5 py-1.5 bg-bg-subtle border border-border rounded-input text-xs text-text focus:border-accent outline-hidden w-48"
+          className="px-2.5 py-1.5 bg-bg-subtle border border-border rounded-input text-xs text-text focus:border-accent outline-hidden w-44"
         />
-        <input
-          type="text"
-          placeholder="Filter by action (e.g. APPROVAL)..."
+        <select
           value={filterAction}
           onChange={(e) => setFilterAction(e.target.value)}
+          className="px-2.5 py-1.5 bg-bg-subtle border border-border rounded-input text-xs text-text focus:border-accent outline-hidden"
+        >
+          <option value="ALL">All Actions</option>
+          <option value="AUTH">Authentication (LOGIN / TOKEN)</option>
+          <option value="APPROVAL">Governance (APPROVAL / REJECT)</option>
+          <option value="TASK">Tasks &amp; Sprints</option>
+          <option value="TICKET">Service Desk Incidents</option>
+          <option value="SYSTEM">System &amp; DB Audits</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Search message or target..."
+          value={searchDetail}
+          onChange={(e) => setSearchDetail(e.target.value)}
           className="px-2.5 py-1.5 bg-bg-subtle border border-border rounded-input text-xs text-text focus:border-accent outline-hidden w-48"
         />
+        {(filterActor || filterAction !== 'ALL' || searchDetail) && (
+          <button
+            type="button"
+            onClick={() => {
+              setFilterActor('');
+              setFilterAction('ALL');
+              setSearchDetail('');
+            }}
+            className="text-xs text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+          >
+            Reset
+          </button>
+        )}
         <span className="text-xs text-text-faint ml-auto">
           Showing {filteredLogs.length} of {auditLogs.length} events
         </span>

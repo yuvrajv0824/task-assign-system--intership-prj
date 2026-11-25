@@ -416,7 +416,7 @@ export function DashboardPage({
                     <div className="flex items-center justify-between text-[11px] text-text-muted pt-1 border-t border-border/50">
                       <span className="tabular-nums flex items-center gap-1">
                         <Clock className="w-3 h-3 text-text-faint" />
-                        {t.dueDate || '14 Nov'}
+                        {t.dueDate || '28 Nov'}
                       </span>
                       
                       {/* Interactive macOS status button */}
