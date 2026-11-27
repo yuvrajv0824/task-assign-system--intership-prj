@@ -14,7 +14,8 @@ import {
   Users, 
   CheckCircle2, 
   Clock, 
-  AlertTriangle 
+  AlertTriangle,
+  Download
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
@@ -97,6 +98,42 @@ export function ProjectsPage({
     });
   };
 
+  const exportProjectsCsv = () => {
+    const isProjects = activeView === 'projects';
+    const headers = isProjects 
+      ? ['Code', 'Name', 'Lead', 'Health', 'Progress', 'DueDate', 'Client']
+      : ['Title', 'ProjectCode', 'Owner', 'TargetDate', 'Progress', 'Status'];
+      
+    const rows = isProjects
+      ? filteredProjects.map((p) => [
+          `"${p.code || ''}"`,
+          `"${(p.name || '').replace(/"/g, '""')}"`,
+          `"${p.lead || ''}"`,
+          `"${p.health || 'ON_TRACK'}"`,
+          `"${p.progress || 0}%"`,
+          `"${p.dueDate || ''}"`,
+          `"${p.client || ''}"`
+        ])
+      : filteredMilestones.map((m) => [
+          `"${(m.title || '').replace(/"/g, '""')}"`,
+          `"${m.projectCode || ''}"`,
+          `"${m.owner || ''}"`,
+          `"${m.targetDate || ''}"`,
+          `"${m.progress || 0}%"`,
+          `"${m.status || 'IN_PROGRESS'}"`
+        ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `epsm_${isProjects ? 'projects' : 'milestones'}_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    addToast(`${isProjects ? 'Projects portfolio' : 'Milestones roadmap'} exported to CSV`, 'success');
+  };
+
   const filteredProjects = projects.filter((p) => {
     const matchesSearch = 
       p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -126,6 +163,15 @@ export function ProjectsPage({
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={exportProjectsCsv}
+            className="rounded-xl shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 mr-1" strokeWidth={1.8} />
+            <span>Export CSV</span>
+          </Button>
           <Button 
             variant="secondary" 
             size="sm" 
