@@ -26,7 +26,7 @@ export function Topbar({
       code: 'NTF-102',
       sender: 'Karthik Swaminathan',
       type: 'DIRECT_MESSAGE',
-      title: 'Sprint 25 Architecture Review',
+      title: 'Sprint 26 Architecture Review',
       message: 'Review completed. Please verify pure JPA repository queries for sprint metrics.',
       priority: 'MEDIUM',
       isRead: false,
@@ -49,6 +49,10 @@ export function Topbar({
 
   const markAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+  };
+
+  const markNotificationRead = (id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
   };
 
   const getTypeIcon = (type) => {
@@ -169,7 +173,8 @@ export function Topbar({
                 {notifications.map((n) => (
                   <div
                     key={n.id}
-                    className={`p-3 space-y-1 transition hover:bg-bg-subtle/60 text-left ${
+                    onClick={() => markNotificationRead(n.id)}
+                    className={`p-3 space-y-1 transition hover:bg-bg-subtle/60 text-left cursor-pointer ${
                       n.isRead ? 'opacity-70' : 'bg-surface'
                     }`}
                   >
